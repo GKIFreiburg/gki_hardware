@@ -8,19 +8,29 @@ xmlns:xacro="http://ros.org/wiki/xacro">
 	<xacro:include filename="$(find gki_cube_gripper_description)/urdf/common_properties.urdf.xacro" />
 
   <xacro:macro name="cube_gripper" params="name parent *origin">
-    <joint name="${name}_elbow_joint" type="fixed">
+    <joint name="${name}_joint" type="fixed">
       <insert_block name="origin" />
       <parent link="${parent}"/>
-      <child link="${name}_base_link"/>
-    </joint>
-
-    <joint name="${name}_joint" type="fixed">
-      <origin xyz="0 0 0.056" rpy="0 0 0" />
-      <parent link="${name}_base_link"/>
       <child link="${name}_link"/>
     </joint>
 
-    <link name="${name}_base_link" />
+    <joint name="${name}_elbow_joint" type="revolute">
+      <axis xyz="0 1 0"/>
+      <limit effort="1000.0" lower="-1.6" upper="0" velocity="0.33"/>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="${name}_link"/>
+      <child link="${name}_arm_link"/>
+    </joint>
+
+    <joint name="${name}_wrist_joint" type="revolute">
+      <axis xyz="0 0 1"/>
+      <limit effort="1000.0" lower="-1.0" upper="0" velocity="0.33"/>
+      <origin xyz="0 0 0" rpy="0 0 ${90  * M_DEGREES}" />
+      <parent link="${name}_arm_link"/>
+      <child link="${name}_right_finger_link"/>
+    </joint>
+
+    <link name="${name}_link" />
 
     <link name="${name}_right_finger_link">
       <inertial>
@@ -31,9 +41,12 @@ xmlns:xacro="http://ros.org/wiki/xacro">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
+          <!--
+          <box size="0.13 0.13 0.07" />
+          -->
           <mesh filename="package://gki_cube_gripper_description/meshes/cube_gripper_finger.stl"/>
         </geometry>
-        <insert_block name="material_dark_gray" />
+        <xacro:insert_block name="material_dark_grey" />
       </visual>
       <collision>
         <origin xyz="0 0 -0.021" rpy="0 0 0" />
@@ -52,9 +65,12 @@ xmlns:xacro="http://ros.org/wiki/xacro">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
+          <!--
+          <box size="0.13 0.13 0.07" />
+          -->
           <mesh filename="package://gki_cube_gripper_description/meshes/cube_gripper_arm.stl"/>
         </geometry>
-        <insert_block name="material_dark_gray" />
+        <xacro:insert_block name="material_dark_grey" />
       </visual>
       <collision>
         <origin xyz="0 0 -0.021" rpy="0 0 0" />
@@ -63,7 +79,7 @@ xmlns:xacro="http://ros.org/wiki/xacro">
         </geometry>
       </collision>
     </link>
-
+<!--
     <link name="${name}_right_elbow_link">
       <inertial>
         <mass value="0.200" />
@@ -75,7 +91,7 @@ xmlns:xacro="http://ros.org/wiki/xacro">
         <geometry>
           <mesh filename="package://gki_cube_gripper_description/meshes/cube_gripper_elbow.stl"/>
         </geometry>
-        <insert_block name="material_dark_gray" />
+        <xacro:insert_block name="material_dark_grey" />
       </visual>
       <collision>
         <origin xyz="0 0 -0.021" rpy="0 0 0" />
@@ -88,7 +104,7 @@ xmlns:xacro="http://ros.org/wiki/xacro">
     <link name="${name}_left_elbow_link">
       <inertial>
         <mass value="0.200" />
-        <origin xyz="0 0 0" rpy="${180 * M_DEGREE} 0 0" />
+        <origin xyz="0 0 0" rpy="${180 * M_DEGREES} 0 0" />
         <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4" />
       </inertial>
       <visual>
@@ -96,7 +112,7 @@ xmlns:xacro="http://ros.org/wiki/xacro">
         <geometry>
           <mesh filename="package://gki_cube_gripper_description/meshes/cube_gripper_elbow.stl"/>
         </geometry>
-        <insert_block name="material_dark_gray" />
+        <xacro:insert_block name="material_dark_grey" />
       </visual>
       <collision>
         <origin xyz="0 0 -0.021" rpy="0 0 0" />
@@ -105,7 +121,7 @@ xmlns:xacro="http://ros.org/wiki/xacro">
         </geometry>
       </collision>
     </link>
-
+-->
   </xacro:macro>
 </robot>
 
