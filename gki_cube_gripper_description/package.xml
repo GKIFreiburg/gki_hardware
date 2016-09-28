@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>gki_pincer_description</name>
+  <name>gki_cube_gripper_description</name>
   <version>0.0.0</version>
   <description>The gki_cube_gripper_description package</description>
 
